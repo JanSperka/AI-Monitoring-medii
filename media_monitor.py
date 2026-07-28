@@ -338,6 +338,31 @@ def send_email(html_body, subject):
     print(f"Report odoslaný na {EMAIL_TO}")
 
 
+def write_github_summary(total_count, new_results):
+    """Zapíše prehľad do GitHub Actions Summary (karta 'Summary' behu), aby
+    boli výsledky vidno priamo v Actions aj bez nastaveného emailu."""
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not summary_path:
+        return
+    lines = [
+        f"## 📰 Media monitor — {', '.join(KEYWORDS)}",
+        "",
+        f"Nájdených {total_count} unikátnych výsledkov v okne {HOURS_BACK}h, "
+        f"z toho {len(new_results)} nových.",
+        "",
+    ]
+    if new_results:
+        for r in new_results:
+            lines.append(f"- **[{r['title']}]({r['link']})** — {r['source']} · {r['published']}")
+    else:
+        lines.append("_Žiadne nové výsledky._")
+    try:
+        with open(summary_path, "a", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n")
+    except Exception as e:
+        print(f"Nepodarilo sa zapísať GITHUB_STEP_SUMMARY: {e}")
+
+
 def main():
     print("Zbieram výsledky...")
     results = collect_all()
@@ -347,6 +372,8 @@ def main():
     new_results = filter_unseen(results, seen_store)
     save_seen_store(seen_store)
     print(f"Z toho {len(new_results)} nových (ešte neodoslaných).")
+
+    write_github_summary(len(results), new_results)
 
     if not new_results and SEND_ONLY_IF_RESULTS:
         print("Žiadne nové výsledky, email sa neposiela.")
