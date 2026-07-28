@@ -55,17 +55,16 @@ SEEN_RETENTION_HOURS = 72
 # hodinovú frekvenciu, aby ti nechodili prázdne emaily každú hodinu)
 SEND_ONLY_IF_RESULTS = True
 
-# RSS feedy slovenských/českých médií, ktoré sa budú prehľadávať
-# (nie sú keyword-searchable, takže filtrujeme podľa nadpisu/perexu)
+# RSS feedy médií, ktoré sa budú prehľadávať (nie sú keyword-searchable,
+# takže filtrujeme podľa nadpisu/perexu). Zatiaľ len slovenské médiá —
+# české feedy (iDNES.cz, Novinky.cz, iROZHLAS.cz) sú vypnuté, dajú sa
+# kedykoľvek pridať späť.
 MEDIA_RSS_FEEDS = [
     ("SME", "https://www.sme.sk/rss-title"),
     ("Aktuality.sk", "https://www.aktuality.sk/rss/"),
     ("Pravda", "https://spravy.pravda.sk/rss/xml/"),
     ("Denník N", "https://dennikn.sk/feed/"),
     ("Živé.sk", "https://www.zive.sk/rss/sc-47/default.aspx"),
-    ("iDNES.cz", "https://servis.idnes.cz/rss.aspx?c=zpravodaj"),
-    ("Novinky.cz", "https://www.novinky.cz/rss"),
-    ("iROZHLAS.cz", "https://www.irozhlas.cz/rss/irozhlas"),
 ]
 
 # Reddit User-Agent (Reddit blokuje requesty bez neho)
@@ -134,9 +133,10 @@ def fetch_gdelt(keyword):
     """GDELT Doc API — timespan sa odvodí z HOURS_BACK (GDELT podporuje
     formáty ako '2h', '1d', '15min')."""
     timespan = f"{HOURS_BACK}h" if HOURS_BACK < 24 else f"{max(1, HOURS_BACK // 24)}d"
+    query = f"{keyword} sourcecountry:SK"
     url = (
         "https://api.gdeltproject.org/api/v2/doc/doc"
-        f"?query={quote(keyword)}&mode=artlist&maxrecords=100"
+        f"?query={quote(query)}&mode=artlist&maxrecords=100"
         f"&timespan={timespan}&format=json"
     )
     results = []
