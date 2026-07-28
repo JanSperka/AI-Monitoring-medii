@@ -284,58 +284,38 @@ def collect_all():
 # -------------------------------- REPORT --------------------------------
 
 def build_html_report(results):
-    date_str = now_utc().strftime("%d.%m.%Y")
-    media_items = [r for r in results if r["channel"] == "media"]
-    social_items = [r for r in results if r["channel"] == "social"]
+    """Krátka notifikácia na položku — nadpis (link) + zdroj/dátum, bez
+    kategorizácie a súhrnov, aby bol email na prvý pohľad jasný."""
+    if not results:
+        return "<p style='color:#888;'>Žiadne nové výsledky.</p>"
 
-    def render_items(items):
-        if not items:
-            return "<p style='color:#888;'>Žiadne nové výsledky.</p>"
-        rows = ""
-        for r in items:
-            rows += f"""
-            <tr>
-              <td style="padding:8px;border-bottom:1px solid #eee;">
-                <a href="{r['link']}" style="color:#1a73e8;text-decoration:none;font-weight:600;">
-                  {r['title']}
-                </a><br/>
-                <span style="color:#666;font-size:12px;">
-                  {r['source']} · {r['published']} · kľúčové slovo: {r['keyword']}
-                </span>
-              </td>
-            </tr>"""
-        return f"<table style='width:100%;border-collapse:collapse;'>{rows}</table>"
+    rows = ""
+    for r in results:
+        rows += f"""
+        <div style="padding:10px 0;border-bottom:1px solid #eee;">
+          <a href="{r['link']}" style="color:#1a73e8;text-decoration:none;font-weight:600;">
+            🆕 {r['title']}
+          </a><br/>
+          <span style="color:#666;font-size:12px;">{r['source']} · {r['published']}</span>
+        </div>"""
 
-    html = f"""
+    return f"""
     <html>
-    <body style="font-family:Arial,sans-serif;max-width:700px;margin:0 auto;">
-      <h2>📰 Denný media monitoring report — {date_str}</h2>
-      <p>Kľúčové slová: <b>{', '.join(KEYWORDS)}</b></p>
-
-      <h3>Médiá ({len(media_items)})</h3>
-      {render_items(media_items)}
-
-      <h3>Social media ({len(social_items)})</h3>
-      {render_items(social_items)}
-
-      <p style="color:#999;font-size:11px;margin-top:24px;">
-        Automaticky vygenerované — zdroje: Google News RSS, GDELT, Reddit, RSS feedy médií.
-        X/Twitter a Facebook/Instagram nie sú zahrnuté (vyžadujú platený API prístup — pozri README).
-      </p>
+    <body style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+      {rows}
     </body>
     </html>
     """
-    return html
 
 
-def send_email(html_body):
+def send_email(html_body, subject):
     if not SMTP_USER or not SMTP_PASS or not EMAIL_TO:
         print("Email nie je nakonfigurovaný (SMTP_USER/SMTP_PASS/EMAIL_TO) — report sa iba vypíše nižšie.\n")
         print(html_body)
         return
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"Media monitoring report — {now_utc().strftime('%d.%m.%Y')}"
+    msg["Subject"] = subject
     msg["From"] = EMAIL_FROM
     msg["To"] = EMAIL_TO
     msg.attach(MIMEText(html_body, "html"))
@@ -362,8 +342,13 @@ def main():
         print("Žiadne nové výsledky, email sa neposiela.")
         return
 
+    if len(new_results) == 1:
+        subject = f"🆕 Nová zmienka: {new_results[0]['title']}"
+    else:
+        subject = f"🆕 {len(new_results)} nových zmienok o {', '.join(KEYWORDS)}"
+
     html = build_html_report(new_results)
-    send_email(html)
+    send_email(html, subject)
 
 
 if __name__ == "__main__":
