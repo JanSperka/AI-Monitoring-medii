@@ -352,8 +352,15 @@ def write_github_summary(total_count, new_results):
         "",
     ]
     if new_results:
+        multi_keyword = len(KEYWORDS) > 1
         for r in new_results:
-            lines.append(f"- **[{r['title']}]({r['link']})** — {r['source']} · {r['published']}")
+            icon = "📱" if r["channel"] == "social" else "📰"
+            keyword_tag = f" · _{r['keyword']}_" if multi_keyword else ""
+            lines.append(f"> {icon} **{r['source']}**{keyword_tag}")
+            lines.append(f"> ### [{r['title']}]({r['link']})")
+            lines.append(f"> 🕒 {r['published']}")
+            lines.append(">")
+            lines.append("")
     else:
         lines.append("_Žiadne nové výsledky._")
     try:
