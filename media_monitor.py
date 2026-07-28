@@ -26,8 +26,12 @@ import feedparser
 
 # ============================== CONFIG ==============================
 
-# Kľúčové slová, ktoré chceš sledovať
-KEYWORDS = ["Orange"]
+# Kľúčové slová, ktoré chceš sledovať. Dá sa prebiť premennou prostredia
+# KEYWORDS (čiarkou oddelený zoznam) — vďaka tomu môže tá istá skriptová
+# základňa bežať ako viacero nezávislých monitoringov (rôzne workflow súbory
+# v .github/workflows/, každý s vlastným KEYWORDS/EMAIL_TO/SEEN_STORE_FILE).
+_keywords_env = os.environ.get("KEYWORDS")
+KEYWORDS = [k.strip() for k in _keywords_env.split(",") if k.strip()] if _keywords_env else ["Orange"]
 
 # Za posledných koľko hodín hľadať. Nastav podľa frekvencie behu skriptu:
 # - beží raz denne (cron "0 7 * * *")  -> HOURS_BACK = 24
@@ -37,8 +41,13 @@ HOURS_BACK = 2
 
 # Súbor, kam sa ukladajú ID už odoslaných výsledkov, aby sa pri hodinovom
 # behu (prekrývajúce sa okná) neposielali duplicity. Pri dennom behu to
-# tiež nevadí, len drží históriu o niečo dlhšie.
-SEEN_STORE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "seen_items.json")
+# tiež nevadí, len drží históriu o niečo dlhšie. Názov súboru sa dá prebiť
+# premennou SEEN_STORE_FILE, aby si viacero monitoringov v tom istom repe
+# neprepisovali navzájom históriu.
+SEEN_STORE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    os.environ.get("SEEN_STORE_FILE", "seen_items.json"),
+)
 # Ako dlho (v hodinách) sa pamätajú už odoslané ID, kým sa vyčistia zo súboru
 SEEN_RETENTION_HOURS = 72
 
@@ -252,10 +261,11 @@ def load_seen_store():
 
 def save_seen_store(store):
     try:
+        os.makedirs(os.path.dirname(SEEN_STORE_PATH), exist_ok=True)
         with open(SEEN_STORE_PATH, "w", encoding="utf-8") as f:
             json.dump(store, f)
     except Exception as e:
-        print(f"Nepodarilo sa uložiť seen_items.json: {e}")
+        print(f"Nepodarilo sa uložiť {SEEN_STORE_PATH}: {e}")
 
 
 def filter_unseen(results, seen_store):

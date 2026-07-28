@@ -1,16 +1,16 @@
-name: Media Monitor (hourly)
+name: Media Monitor - vláda (hourly)
 
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "15 * * * *"
   workflow_dispatch: {}
 
 permissions:
   contents: write
 
 env:
-  KEYWORDS: "Orange"
-  SEEN_STORE_FILE: "data/orange/seen_items.json"
+  KEYWORDS: "vláda"
+  SEEN_STORE_FILE: "data/vlada/seen_items.json"
 
 jobs:
   run:
