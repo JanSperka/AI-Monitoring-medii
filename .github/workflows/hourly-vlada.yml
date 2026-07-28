@@ -1,4 +1,4 @@
-name: Media Monitor - vláda (hourly)
+name: Vláda (hourly)
 
 on:
   schedule:
