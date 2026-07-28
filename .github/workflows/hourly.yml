@@ -1,4 +1,4 @@
-name: Media Monitor (hourly)
+name: Orange (hourly)
 
 on:
   schedule:
