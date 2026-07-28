@@ -40,6 +40,8 @@ jobs:
             git config user.email "actions@users.noreply.github.com"
             git add seen_items.json
             git commit -m "Update seen_items.json [skip ci]"
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase "origin/$GITHUB_REF_NAME"
             git push
           else
             echo "No changes to seen_items.json"
