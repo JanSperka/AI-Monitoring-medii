@@ -63,11 +63,11 @@ MEDIA_RSS_FEEDS = [
 REDDIT_USER_AGENT = "media-monitor-script/1.0 (by u/example)"
 
 # Email nastavenia — odporúčané nastaviť cez premenné prostredia
-SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_HOST = os.environ.get("SMTP_HOST") or "smtp.gmail.com"
+SMTP_PORT = int(os.environ.get("SMTP_PORT") or "587")
 SMTP_USER = os.environ.get("SMTP_USER", "")
 SMTP_PASS = os.environ.get("SMTP_PASS", "")
-EMAIL_FROM = os.environ.get("EMAIL_FROM", SMTP_USER)
+EMAIL_FROM = os.environ.get("EMAIL_FROM") or SMTP_USER
 EMAIL_TO = os.environ.get("EMAIL_TO", "")  # môže byť "a@x.com,b@y.com"
 
 # =====================================================================
