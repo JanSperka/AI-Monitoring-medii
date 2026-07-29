@@ -37,7 +37,7 @@ KEYWORDS = [k.strip() for k in _keywords_env.split(",") if k.strip()] if _keywor
 # - beží raz denne (cron "0 7 * * *")  -> HOURS_BACK = 24
 # - beží raz za hodinu (cron "0 * * * *") -> HOURS_BACK = 1 (odporúčané o niečo
 #   väčšie okno napr. 2, aby sa nestratili položky pri oneskorení feedov)
-HOURS_BACK = 2
+HOURS_BACK = 26
 
 # Súbor, kam sa ukladajú ID už odoslaných výsledkov, aby sa pri hodinovom
 # behu (prekrývajúce sa okná) neposielali duplicity. Pri dennom behu to

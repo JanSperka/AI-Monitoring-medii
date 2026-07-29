@@ -1,8 +1,8 @@
-name: Vláda (hourly)
+name: Vláda (daily)
 
 on:
   schedule:
-    - cron: "15 * * * *"
+    - cron: "15 7 * * *"
   workflow_dispatch: {}
 
 permissions:

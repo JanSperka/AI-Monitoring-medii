@@ -1,8 +1,8 @@
-name: Orange (hourly)
+name: Orange (daily)
 
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "0 7 * * *"
   workflow_dispatch: {}
 
 permissions:
