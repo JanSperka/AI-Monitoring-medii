@@ -115,3 +115,16 @@ zadefinovať rozpočet a ísť priamo cez oficiálne platené API.
   `collect_all()`, ktorý zhrnie výsledky).
 - Ukladanie histórie do CSV/SQLite namiesto len denného emailu.
 - Web dashboard namiesto/popri emaile.
+
+## 9. Manuálny Facebook monitoring (pilot — Právo na Pravdu)
+
+Keďže automatizovaný keyword-monitoring Facebooku nie je pre bežné firmy
+dostupný (pozri bod 7), toto sú len **priame odkazy na Facebook vyhľadávanie**
+pre kľúčové slová monitoringu "Právo na Pravdu" — nič sa nespúšťa samo, treba
+ich občas ručne otvoriť a prezrieť:
+
+- [Právo na Pravdu — Top](https://www.facebook.com/search/top?q=Pr%C3%A1vo%20na%20Pravdu) · [len príspevky](https://www.facebook.com/search/posts?q=Pr%C3%A1vo%20na%20Pravdu)
+- [Zoroslav Kollár — Top](https://www.facebook.com/search/top?q=Zoroslav%20Koll%C3%A1r) · [len príspevky](https://www.facebook.com/search/posts?q=Zoroslav%20Koll%C3%A1r)
+
+Ak sa tento pilot osvedčí, dá sa rovnaký zoznam odkazov spraviť aj pre
+ostatné monitoringy (Orange, Vláda, Primátor Bratislavy).
