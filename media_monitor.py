@@ -357,9 +357,7 @@ def write_github_summary(total_count, new_results):
             icon = "📱" if r["channel"] == "social" else "📰"
             keyword_tag = f" · _{r['keyword']}_" if multi_keyword else ""
             lines.append(f"> {icon} **{r['source']}**{keyword_tag}")
-            lines.append(
-                f'> ### <a href="{r["link"]}" target="_blank" rel="noopener">{r["title"]}</a>'
-            )
+            lines.append(f"> ### [{r['title']}]({r['link']})")
             lines.append(f"> 🕒 {r['published']}")
             lines.append(">")
             lines.append("")
