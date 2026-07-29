@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 env:
-  KEYWORDS: "primátor Bratislavy,Matúš Vallo,bratislavský primátor,Matúšom Vallom,Matúšovi Vallovi"
+  KEYWORDS: "primátor Bratislavy,Matúš Vallo,bratislavský primátor,bratislavským primátorom,Matúšom Vallom,Matúšovi Vallovi"
   SEEN_STORE_FILE: "data/primator-bratislavy/seen_items.json"
 
 jobs:
