@@ -1,0 +1,52 @@
+name: Primátor Bratislavy (daily)
+
+on:
+  schedule:
+    - cron: "45 7 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+env:
+  KEYWORDS: "primátor Bratislavy,Matúš Vallo,bratislavský primátor,Matúšom Vallom,Matúšovi Vallovi"
+  SEEN_STORE_FILE: "data/primator-bratislavy/seen_items.json"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run media monitor
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: python media_monitor.py
+
+      - name: Persist seen store
+        run: |
+          if [ -n "$(git status --porcelain "$SEEN_STORE_FILE")" ]; then
+            git config user.name "media-monitor-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add "$SEEN_STORE_FILE"
+            git commit -m "Update $SEEN_STORE_FILE [skip ci]"
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase "origin/$GITHUB_REF_NAME"
+            git push
+          else
+            echo "No changes to $SEEN_STORE_FILE"
+          fi
