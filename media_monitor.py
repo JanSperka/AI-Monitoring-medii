@@ -65,6 +65,11 @@ MEDIA_RSS_FEEDS = [
     ("Pravda", "https://spravy.pravda.sk/rss/xml/"),
     ("Denník N", "https://dennikn.sk/feed/"),
     ("Živé.sk", "https://www.zive.sk/rss/sc-47/default.aspx"),
+    ("TASR (Teraz.sk)", "https://www.teraz.sk/rss/vsetky-spravy.rss"),
+    ("RTVS (Správy STVR)", "https://spravy.stvr.sk/feed/"),
+    ("Topky.sk", "https://www.topky.sk/rss/8/TOPKY"),
+    ("Hlavné správy", "https://www.hlavnespravy.sk/feed"),
+    ("Denník Štandard", "https://standard.sk/feed"),
 ]
 
 # Reddit User-Agent (Reddit blokuje requesty bez neho)
